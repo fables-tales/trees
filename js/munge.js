@@ -34,6 +34,7 @@ $(document).ready(function() {
     }
     console.log(grammar);
     var leafpositions = [];
+    var dangleMultiplier = 1.0;
     for (var i = 0; i < grammar.length; i++) {
         c = grammar[i];
         if (c == "f") {
@@ -59,6 +60,7 @@ $(document).ready(function() {
             depth++;
             strokeWidth /= 1.5;
             distancePer /= 1.2;
+            dangleMultiplier += 0.1;
             positionStack.push(positionX);
             positionStack.push(positionY);
             positionStack.push(angle);
@@ -66,13 +68,14 @@ $(document).ready(function() {
             depth--;
             strokeWidth *= 1.5;
             distancePer *= 1.2;
+            dangleMultiplier -= 0.1;
             angle = positionStack.pop();
             positionY = positionStack.pop();
             positionX = positionStack.pop();
         } else if (c == "+") {
-            angle += dangle();
+            angle += dangle()*dangleMultiplier;
         } else if (c == "-") {
-            angle -= dangle();
+            angle -= dangle()*dangleMultiplier;
         }
     }
     for (var i = 1; i < leafpositions.length; i += 2) {
